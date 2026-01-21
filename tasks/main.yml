@@ -1,0 +1,4 @@
+---
+# tasks file for ping_test role
+- name: Ping managed host
+  ansible.builtin.ping:

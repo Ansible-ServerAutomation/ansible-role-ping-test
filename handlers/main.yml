@@ -1,0 +1,5 @@
+---
+# handlers for ping_test role
+- name: ping_test handler placeholder
+  ansible.builtin.debug:
+    msg: "handler invoked (placeholder)"
