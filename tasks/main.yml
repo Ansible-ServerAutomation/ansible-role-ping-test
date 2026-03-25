@@ -12,7 +12,6 @@
       vars:
         execution_result_return_code: "{{ ping_result.rc | default(0) }}"
         execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
-        execution_result_failed_task: "Run the primary task"
   rescue:
     - name: Capture Execution Details (Failure)
       ansible.builtin.include_role:
@@ -20,7 +19,6 @@
       vars:
         execution_result_return_code: "{{ ping_result.rc | default(1) }}"
         execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
-        execution_result_failed_task: "Run the primary task"
 
 # - name: Windows Ping Test
 #   block:
@@ -34,7 +32,6 @@
 #       vars:
 #         execution_result_return_code: "{{ ping_result.rc | default(0) }}"
 #         execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
-#         execution_result_failed_task: "Run the primary task"
 #   rescue:
 #     - name: Capture Execution Details (Failure)
 #       ansible.builtin.include_role:
@@ -42,4 +39,3 @@
 #       vars:
 #         execution_result_return_code: "{{ ping_result.rc | default(1) }}"
 #         execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
-#         execution_result_failed_task: "Run the primary task"
