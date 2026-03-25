@@ -11,7 +11,7 @@
         name: execution_result
       vars:
         execution_result_return_code: "{{ ping_result.rc | default(0) }}"
-        execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
+        execution_result_message: "{{ ping_result.stdout | default('Task completed') }}"
   rescue:
     - name: Capture Execution Details (Failure)
       ansible.builtin.include_role:
