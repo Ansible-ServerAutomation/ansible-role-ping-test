@@ -1,9 +1,29 @@
 ---
 # tasks file for ping_test role
-- name: Linux Ping Test
+# - name: Linux Ping Test
+#   block:
+#     - name: Ping managed host
+#       ansible.builtin.ping:
+#       register: ping_result
+
+#     - name: Capture Execution Details (Success)
+#       ansible.builtin.include_role:
+#         name: execution_result
+#       vars:
+#         execution_result_return_code: "{{ ping_result.rc | default(0) }}"
+#         execution_result_message: "{{ ping_result.stdout | default('Task completed') }}"
+#   rescue:
+#     - name: Capture Execution Details (Failure)
+#       ansible.builtin.include_role:
+#         name: execution_result
+#       vars:
+#         execution_result_return_code: "{{ ping_result.rc | default(1) }}"
+#         execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
+
+- name: Windows Ping Test
   block:
     - name: Ping managed host
-      ansible.builtin.ping:
+      ansible.builtin.win_ping:
       register: ping_result
 
     - name: Capture Execution Details (Success)
@@ -19,23 +39,3 @@
       vars:
         execution_result_return_code: "{{ ping_result.rc | default(1) }}"
         execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
-
-# - name: Windows Ping Test
-#   block:
-#     - name: Ping managed host
-#       ansible.builtin.win_ping:
-#       register: ping_result
-
-#     - name: Capture Execution Details (Success)
-#       ansible.builtin.include_role:
-#         name: execution_result
-#       vars:
-#         execution_result_return_code: "{{ ping_result.rc | default(0) }}"
-#         execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
-#   rescue:
-#     - name: Capture Execution Details (Failure)
-#       ansible.builtin.include_role:
-#         name: execution_result
-#       vars:
-#         execution_result_return_code: "{{ ping_result.rc | default(1) }}"
-#         execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
