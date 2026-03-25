@@ -37,5 +37,10 @@
       ansible.builtin.include_role:
         name: execution_result
       vars:
-        execution_result_return_code: "{{ ping_result.rc | default(1) }}"
-        execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
+        execution_result_return_code: "{{ ping_result.rc |  default(ansible_failed_result.rc) | default(1) }}"
+        execution_result_stdout: "{{ ping_result.stdout | default(ansible_failed_result.module_stdout) | default('') }}"
+        execution_result_stderr: "{{ ping_result.stderr | default(ansible_failed_result.module_stderr) | default('') }}"
+        execution_result_message: "{{ ping_result.stderr | default(task_result.msg) | default('Task failed') }}"
+        execution_result_exception: "{{ ansible_failed_result.exception | default('') }}"
+        execution_result_warnings: "{{ ping_result.warnings | default(ansible_failed_result.warnings) | default([]) }}"
+        execution_result_failed_task: "{{ ansible_failed_task.name }}"
