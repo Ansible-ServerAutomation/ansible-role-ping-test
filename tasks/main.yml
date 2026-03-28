@@ -19,28 +19,28 @@
           - "Architecture: {{ ansible_architecture | default('Unknown') }}"
           - "Hostname: {{ ansible_hostname | default('Unknown') }}"
 
-- name: Linux Ping Test
-  when: ansible_os_family != 'Windows'
-  block:
-    - name: Ping managed host
-      ansible.builtin.ping:
-      register: ping_result
+# - name: Linux Ping Test
+#   when: ansible_os_family != 'Windows'
+#   block:
+#     - name: Ping managed host
+#       ansible.builtin.ping:
+#       register: ping_result
 
-    - name: Capture Execution Details (Success)
-      ansible.builtin.include_role:
-        name: execution_result
-      vars:
-        execution_result_registered_var: "{{ ping_result }}"
+#     - name: Capture Execution Details (Success)
+#       ansible.builtin.include_role:
+#         name: execution_result
+#       vars:
+#         execution_result_registered_var: "{{ ping_result }}"
 
-  rescue:
-    - name: Capture Execution Details (Failure)
-      ansible.builtin.include_role:
-        name: execution_result
-      vars:
-        execution_result_registered_var: "{{ ping_result }}"
+#   rescue:
+#     - name: Capture Execution Details (Failure)
+#       ansible.builtin.include_role:
+#         name: execution_result
+#       vars:
+#         execution_result_registered_var: "{{ ping_result }}"
 
 - name: Windows Ping Test
-  when: ansible_os_family == 'Windows'
+  #when: ansible_os_family == 'Windows'
   block:
     - name: Ping managed host
       ansible.builtin.win_ping:
