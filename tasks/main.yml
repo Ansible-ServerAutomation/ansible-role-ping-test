@@ -20,23 +20,55 @@
           - "Hostname: {{ ansible_hostname | default('Unknown') }}"
 
 - name: Linux Ping Test
+  when: ansible_os_family != 'Windows'
   block:
     - name: Ping managed host
       ansible.builtin.ping:
       register: ping_result
 
+    - name: Capture Execution Details (Success)
+      ansible.builtin.include_role:
+        name: execution_result
+      vars:
+        execution_result_return_code: "{{ ping_result.rc | default(0) }}"
+        execution_result_message: "{{ ping_result.stdout | default('Ping successful') }}"
+
   rescue:
     - name: Capture Execution Details (Failure)
       ansible.builtin.include_role:
         name: execution_result
+      vars:
+        execution_result_return_code: "{{ ping_result.rc | default(1) }}"
+        execution_result_stdout: "{{ ping_result.stdout | default('') }}"
+        execution_result_stderr: "{{ ping_result.stderr | default('') }}"
+        execution_result_message: "{{ ping_result.msg | default('Ping failed') }}"
+        execution_result_exception: "{{ ping_result.exception | default('') }}"
+        execution_result_warnings: "{{ ping_result.warnings | default([]) }}"
+        execution_result_failed_task: "{{ ansible_failed_task.name | default('Ping managed host') }}"
 
 - name: Windows Ping Test
+  when: ansible_os_family == 'Windows'
   block:
     - name: Ping managed host
       ansible.builtin.win_ping:
       register: ping_result
 
+    - name: Capture Execution Details (Success)
+      ansible.builtin.include_role:
+        name: execution_result
+      vars:
+        execution_result_return_code: "{{ ping_result.rc | default(0) }}"
+        execution_result_message: "{{ ping_result.stdout | default('Ping successful') }}"
+
   rescue:
     - name: Capture Execution Details (Failure)
       ansible.builtin.include_role:
         name: execution_result
+      vars:
+        execution_result_return_code: "{{ ping_result.rc | default(1) }}"
+        execution_result_stdout: "{{ ping_result.stdout | default('') }}"
+        execution_result_stderr: "{{ ping_result.stderr | default('') }}"
+        execution_result_message: "{{ ping_result.msg | default('Ping failed') }}"
+        execution_result_exception: "{{ ping_result.exception | default('') }}"
+        execution_result_warnings: "{{ ping_result.warnings | default([]) }}"
+        execution_result_failed_task: "{{ ansible_failed_task.name | default('Ping managed host') }}"
