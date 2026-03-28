@@ -28,22 +28,11 @@
     - name: Capture Execution Details (Success)
       ansible.builtin.include_role:
         name: execution_result
-      vars:
-        execution_result_return_code: "{{ ping_result.rc | default(0) }}"
-        execution_result_message: "{{ ping_result.stdout | default('Task completed') }}"
 
   rescue:
     - name: Capture Execution Details (Failure)
       ansible.builtin.include_role:
         name: execution_result
-      vars:
-        execution_result_return_code: "{{ ping_result.rc | default(1) }}"
-        execution_result_stdout: "{{ ping_result.stdout | default('') }}"
-        execution_result_stderr: "{{ ping_result.stderr | default('') }}"
-        execution_result_message: "{{ ping_result.msg | default('Task failed') }}"
-        execution_result_exception: "{{ ping_result.exception | default('') }}"
-        execution_result_warnings: "{{ ping_result.warnings | default([]) }}"
-        execution_result_failed_task: "{{ ansible_failed_task.name }}"
 
 - name: Windows Ping Test
   block:
@@ -54,19 +43,8 @@
     - name: Capture Execution Details (Success)
       ansible.builtin.include_role:
         name: execution_result
-      vars:
-        execution_result_return_code: "{{ ping_result.rc | default(0) }}"
-        execution_result_message: "{{ ping_result.stdout | default('Task completed') }}"
 
   rescue:
     - name: Capture Execution Details (Failure)
       ansible.builtin.include_role:
         name: execution_result
-      vars:
-        execution_result_return_code: "{{ ping_result.rc | default(1) }}"
-        execution_result_stdout: "{{ ping_result.stdout | default('') }}"
-        execution_result_stderr: "{{ ping_result.stderr | default('') }}"
-        execution_result_message: "{{ ping_result.msg | default('Task failed') }}"
-        execution_result_exception: "{{ ping_result.exception | default('') }}"
-        execution_result_warnings: "{{ ping_result.warnings | default([]) }}"
-        execution_result_failed_task: "{{ ansible_failed_task.name }}"
