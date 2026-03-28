@@ -25,10 +25,6 @@
       ansible.builtin.ping:
       register: ping_result
 
-    - name: Capture Execution Details (Success)
-      ansible.builtin.include_role:
-        name: execution_result
-
   rescue:
     - name: Capture Execution Details (Failure)
       ansible.builtin.include_role:
@@ -39,10 +35,6 @@
     - name: Ping managed host
       ansible.builtin.win_ping:
       register: ping_result
-
-    - name: Capture Execution Details (Success)
-      ansible.builtin.include_role:
-        name: execution_result
 
   rescue:
     - name: Capture Execution Details (Failure)
