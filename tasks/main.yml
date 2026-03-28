@@ -1,24 +1,49 @@
 ---
-# tasks file for ping_test role
-# - name: Linux Ping Test
-#   block:
-#     - name: Ping managed host
-#       ansible.builtin.ping:
-#       register: ping_result
+- name: Gather Operating System Details
+  block:
+    - name: Collect OS facts
+      ansible.builtin.setup:
+        gather_subset:
+          - '!all'
+          - '!min'
+          - 'distribution'
+          - 'platform'
 
-#     - name: Capture Execution Details (Success)
-#       ansible.builtin.include_role:
-#         name: execution_result
-#       vars:
-#         execution_result_return_code: "{{ ping_result.rc | default(0) }}"
-#         execution_result_message: "{{ ping_result.stdout | default('Task completed') }}"
-#   rescue:
-#     - name: Capture Execution Details (Failure)
-#       ansible.builtin.include_role:
-#         name: execution_result
-#       vars:
-#         execution_result_return_code: "{{ ping_result.rc | default(1) }}"
-#         execution_result_message: "{{ ping_result.stderr | default('Unknown error') }}"
+    - name: Display Operating System Information
+      ansible.builtin.debug:
+        msg:
+          - "Operating System: {{ ansible_distribution | default('Unknown') }}"
+          - "OS Version: {{ ansible_distribution_version | default('Unknown') }}"
+          - "OS Family: {{ ansible_os_family | default('Unknown') }}"
+          - "System: {{ ansible_system | default('Unknown') }}"
+          - "Architecture: {{ ansible_architecture | default('Unknown') }}"
+          - "Hostname: {{ ansible_hostname | default('Unknown') }}"
+
+- name: Linux Ping Test
+  block:
+    - name: Ping managed host
+      ansible.builtin.ping:
+      register: ping_result
+
+    - name: Capture Execution Details (Success)
+      ansible.builtin.include_role:
+        name: execution_result
+      vars:
+        execution_result_return_code: "{{ ping_result.rc | default(0) }}"
+        execution_result_message: "{{ ping_result.stdout | default('Task completed') }}"
+
+  rescue:
+    - name: Capture Execution Details (Failure)
+      ansible.builtin.include_role:
+        name: execution_result
+      vars:
+        execution_result_return_code: "{{ ping_result.rc | default(1) }}"
+        execution_result_stdout: "{{ ping_result.stdout | default('') }}"
+        execution_result_stderr: "{{ ping_result.stderr | default('') }}"
+        execution_result_message: "{{ ping_result.msg | default('Task failed') }}"
+        execution_result_exception: "{{ ping_result.exception | default('') }}"
+        execution_result_warnings: "{{ ping_result.warnings | default([]) }}"
+        execution_result_failed_task: "{{ ansible_failed_task.name }}"
 
 - name: Windows Ping Test
   block:
@@ -32,15 +57,16 @@
       vars:
         execution_result_return_code: "{{ ping_result.rc | default(0) }}"
         execution_result_message: "{{ ping_result.stdout | default('Task completed') }}"
+
   rescue:
     - name: Capture Execution Details (Failure)
       ansible.builtin.include_role:
         name: execution_result
       vars:
-        execution_result_return_code: "{{ ping_result.rc |  default(ansible_failed_result.rc) | default(1) }}"
-        execution_result_stdout: "{{ ping_result.stdout | default(ansible_failed_result.module_stdout) | default('') }}"
-        execution_result_stderr: "{{ ping_result.stderr | default(ansible_failed_result.module_stderr) | default('') }}"
-        execution_result_message: "{{ ping_result.msg | default(ansible_failed_result.msg) | default('Task failed') }}"
-        execution_result_exception: "{{ ansible_failed_result.exception | default('') }}"
-        execution_result_warnings: "{{ ping_result.warnings | default(ansible_failed_result.warnings) | default([]) }}"
+        execution_result_return_code: "{{ ping_result.rc | default(1) }}"
+        execution_result_stdout: "{{ ping_result.stdout | default('') }}"
+        execution_result_stderr: "{{ ping_result.stderr | default('') }}"
+        execution_result_message: "{{ ping_result.msg | default('Task failed') }}"
+        execution_result_exception: "{{ ping_result.exception | default('') }}"
+        execution_result_warnings: "{{ ping_result.warnings | default([]) }}"
         execution_result_failed_task: "{{ ansible_failed_task.name }}"
