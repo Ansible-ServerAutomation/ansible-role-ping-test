@@ -58,3 +58,8 @@
         name: execution_result
       vars:
         execution_result_registered_var: "{{ ping_result }}"
+
+  always:
+    - name: Update failure result in persistent db
+      ansible.builtin.include_role:
+        name: update-db
